@@ -12,17 +12,17 @@ var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    app: './src/main.js' // 入口文件
   },
   output: {
-    path: config.build.assetsRoot,
-    publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath,
-    filename: '[name].js'
+    path: config.build.assetsRoot, // 产出目录
+    publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath, // 公共资源文件根目录
+    filename: '[name].js' // 文件名
   },
   resolve: {
-    extensions: ['', '.js', '.vue', '.json'],
-    fallback: [path.join(__dirname, '../node_modules')],
-    alias: {
+    extensions: ['', '.js', '.vue', '.json'],// 自动补全文件后缀
+    fallback: [path.join(__dirname, '../node_modules')],// require没找到时 去node_modules找
+    alias: { //别名 缩短路径长度
       'vue$': 'vue/dist/vue.common.js',
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),
@@ -32,8 +32,8 @@ module.exports = {
   resolveLoader: {
     fallback: [path.join(__dirname, '../node_modules')]
   },
-  module: {
-    preLoaders: [
+  module: {// 对某种类型的文件应用某个loader来处理
+    preLoaders: [// loader之前处理
       {
         test: /\.vue$/,
         loader: 'eslint',
@@ -72,7 +72,7 @@ module.exports = {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url',
         query: {
-          limit: 10000,
+          limit: 10000, // 图片大小小于10kb时会生成base64串打包起来
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
         }
       },

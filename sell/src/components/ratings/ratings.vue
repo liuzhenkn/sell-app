@@ -1,6 +1,6 @@
 <template>
-  <div class="header">
-    header
+  <div>
+    ratings
   </div>
 </template>
 <script type="text/ecamscript-6">

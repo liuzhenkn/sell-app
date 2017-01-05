@@ -1,6 +1,6 @@
 <template>
-  <div class="header">
-    header
+  <div>
+    goods
   </div>
 </template>
 <script type="text/ecamscript-6">

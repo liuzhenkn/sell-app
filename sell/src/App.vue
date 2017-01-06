@@ -1,6 +1,6 @@
 <template>
   <div>
-      <vheader></vheader>
+      <vheader v-bind:seller="seller"></vheader>
       <div class="tab border-1px">
         <div class="tab-item">
           <router-link to="/goods">商品</router-link>
@@ -15,9 +15,32 @@
       <router-view></router-view>
   </div>
 </template>
-<script>
+<script type="text/ecmascript-6">
   import header from './components/header/header';
+
+  const ERR_OK = 0;
+
   export default{
+    data() {
+      return {
+        seller: {}
+      };
+    },
+    created() {
+      this.$http.get('/api/seller').then((response) => {
+        response = response.body;
+        if (response.errno === ERR_OK) {
+          this.seller = response.data;
+        }
+      });
+      // 不使用箭头函数的写法
+      // this.$http.get('/api/seller').then(function(response) {
+      //     response = response.body;
+      //     if (response.errno === ERR_OK) {
+      //       this.seller = response.data;
+      //     }
+      // });
+    },
     components: {
       'vheader': header
     }

@@ -17,12 +17,12 @@
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
       </div>
-      <div v-if="seller.supports" class="support-count" v-on:click="showDetail">
+      <div v-if="seller.supports" class="support-count" v-on:click="toggleDetail">
         <span class="count">{{seller.supports.length}}个</span>
         <i class="icon-keyboard_arrow_right"></i>
       </div>
     </div>
-    <div class="bulletin-wrapper" v-on:click="showDetail">
+    <div class="bulletin-wrapper" v-on:click="toggleDetail">
       <span class="bulletin-title"></span>
       <span class="bulletin-text">{{seller.bulletin}}</span>
       <i class="icon-keyboard_arrow_right"></i>
@@ -31,11 +31,23 @@
       <img width="100%" height="100%" v-bind:src="seller.avatar">
     </div>
     <div class="detail" v-show="detailShow">
-
+      <div class="detail-wapper clearfix">
+        <div class="detail-main">
+          <h1 class="name">{{seller.name}}</h1>
+          <div class="star-warpper">
+            <star v-bind:size="48" v-bind:score="seller.score"></star>
+          </div>
+        </div>
+      </div>
+      <div class="detail-close">
+          <i class="icon-close" v-on:click="toggleDetail"></i>
+      </div>
     </div>
   </div>
 </template>
 <script type="text/ecamscript-6">
+ import star from '../star/star';
+
   export default {
     props: {
       seller: {
@@ -48,12 +60,15 @@
       }
     },
     methods: {
-      showDetail() {
-        this.detailShow = true;
+      toggleDetail() {
+        this.detailShow = !this.detailShow;
       }
     },
     created() {
       this.classMap = ['decrease','discount','special','invoice','guarantee'];
+    },
+    components: {
+      star: star
     }
   };
 </script>
@@ -181,4 +196,25 @@
       height: 100%
       overflow: auto
       background: rgba(7,17,27,0.8)
+      .detail-wapper
+        min-height: 100%
+        width: 100%
+        .detail-main
+          margin-top: 64px
+          padding-bottom: 64px
+          .name
+            line-height: 16px
+            text-align: center
+            font-weight: 700
+          .star-warpper
+            margin-top: 18px
+            padding: 2px 0
+            text-align: center
+      .detail-close
+        position: relative
+        width: 32px
+        height: 32px
+        margin: -64px auto 0 auto
+        clear: both
+        font-size: 32px
 </style>

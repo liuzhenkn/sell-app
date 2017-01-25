@@ -36,10 +36,12 @@
         </li>
       </ul>
     </div>
+    <shopcart v-bind:delivery-price="seller.deliveryPrice" v-bind:min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 <script type="text/ecamscript-6">
   import BScroll from 'better-scroll'
+  import shopcart from '../shopcart/shopcart'
   const ERR_OK = 0;
   export default {
     props: {
@@ -109,6 +111,9 @@
         let element = foodList[index];
         this.foodsScroll.scrollToElement(element,300);
       }
+    },
+    components: {
+      shopcart: shopcart
     }
   };
 </script>

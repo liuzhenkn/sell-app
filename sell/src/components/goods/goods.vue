@@ -30,18 +30,22 @@
                   <span class="new">￥{{food.price}}</span>
                   <span v-show="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
                 </div>
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol v-bind:food="food"></cartcontrol>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <shopcart v-bind:delivery-price="seller.deliveryPrice" v-bind:min-price="seller.minPrice"></shopcart>
+    <shopcart ref="shopcart" v-bind:select-foods="selectFoods" v-bind:delivery-price="seller.deliveryPrice" v-bind:min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 <script type="text/ecamscript-6">
   import BScroll from 'better-scroll'
   import shopcart from '../shopcart/shopcart'
+  import cartcontrol from '../cartcontrol/cartcontrol'
   const ERR_OK = 0;
   export default {
     props: {
@@ -66,6 +70,17 @@
           }
         }
         return 0;
+      },
+      selectFoods() {
+        let foods = [];
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              foods.push(food);
+            }
+          });
+        });
+        return foods;
       }
     },
     created() {
@@ -87,6 +102,7 @@
           click: true
         });
         this.foodsScroll = new BScroll(this.$refs.foodsWrapper,{
+          click: true,
           probeType: 3//监听滚动位置
         });
         this.foodsScroll.on('scroll',(pos) => {
@@ -110,10 +126,19 @@
         let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
         let element = foodList[index];
         this.foodsScroll.scrollToElement(element,300);
+      },
+      _drop (target) {
+        this.$refs.shopcart.drop(target);
       }
     },
     components: {
-      shopcart: shopcart
+      shopcart: shopcart,
+      cartcontrol: cartcontrol
+    },
+    event: {
+      'cart.add' (target) {
+        this._drop(target)
+      }
     }
   };
 </script>
@@ -221,4 +246,8 @@
               text-decoration: line-through
               font-size: 10px
               color: rgb(147,153,159)
+          .cartcontrol-wrapper
+            position: absolute
+            right: 0
+            bottom: 12px
 </style>

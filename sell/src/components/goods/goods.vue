@@ -126,19 +126,11 @@
         let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
         let element = foodList[index];
         this.foodsScroll.scrollToElement(element,300);
-      },
-      _drop (target) {
-        this.$refs.shopcart.drop(target);
       }
     },
     components: {
       shopcart: shopcart,
       cartcontrol: cartcontrol
-    },
-    event: {
-      'cart.add' (target) {
-        this._drop(target)
-      }
     }
   };
 </script>

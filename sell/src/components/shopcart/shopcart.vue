@@ -221,7 +221,7 @@ export default {
           display: inline-block
           vertical-align: top
           line-height: 24px
-          margin: 12px 0 0 12px
+          margin: 12px 0 0 2px
           font-size: 10px
       .content-right
         flex: 0 0 105px

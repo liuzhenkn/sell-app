@@ -15,7 +15,7 @@
         <li v-for="item in goods" class="food-list food-list-hook">
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li v-for="food in item.foods" class="food-item border-1px">
+            <li @click="selectFood(food,$event)" v-for="food in item.foods" class="food-item border-1px">
               <div class="icon">
                 <img width="57" height="57" v-bind:src="food.icon">
               </div>
@@ -27,7 +27,7 @@
                   <span>好评率{{food.rating}}</span>
                 </div>
                 <div class="price">
-                  <span class="new">￥{{food.price}}</span>
+                  <span class="now">￥{{food.price}}</span>
                   <span v-show="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
@@ -40,11 +40,13 @@
       </ul>
     </div>
     <shopcart ref="shopcart" v-bind:select-foods="selectFoods" v-bind:delivery-price="seller.deliveryPrice" v-bind:min-price="seller.minPrice"></shopcart>
+    <food ref="food" :food="selectedFood"></food>
   </div>
 </template>
 <script type="text/ecamscript-6">
   import BScroll from 'better-scroll'
   import shopcart from '../shopcart/shopcart'
+  import food from '../food/food'
   import cartcontrol from '../cartcontrol/cartcontrol'
   const ERR_OK = 0;
   export default {
@@ -57,7 +59,8 @@
       return {
         goods: [],
         listHeight: [],
-        scrollY: 0
+        scrollY: 0,
+        selectedFood: {}
       };
     },
     computed: {
@@ -126,11 +129,19 @@
         let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
         let element = foodList[index];
         this.foodsScroll.scrollToElement(element,300);
+      },
+      selectFood (food,event){
+        if (!event._constructed) {
+          return;
+        }
+        this.selectedFood = food;
+        this.$refs.food.show();
       }
     },
     components: {
       shopcart: shopcart,
-      cartcontrol: cartcontrol
+      cartcontrol: cartcontrol,
+      food: food
     }
   };
 </script>
@@ -230,7 +241,7 @@
           .price
             font-weight: 800
             line-height: 24px
-            .new
+            .now
               margin-right: 8px
               font-size: 14px
               color: rgb(240,20,20)

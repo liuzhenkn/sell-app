@@ -1,11 +1,11 @@
 <template>
   <div class="rating-select">
     <div class="rating-type border-1px">
-      <span @click="select(2)" class="block positive" :class="{'active':selectType === 2}">{{desc.all}}<span class="count">22</span></span>
-      <span @click="select(1)" class="block positive" :class="{'active':selectType === 1}">{{desc.positive}}<span class="count">22</span></span>
-      <span @click="select(0)" class="block negative" :class="{'active':selectType === 0}">{{desc.negative}}<span class="count">22</span></span>
+      <span @click="select(2)" class="block positive" :class="{'active':selectType === 2}">{{desc.all}}<span class="count">{{ratings.length}}</span></span>
+      <span @click="select(1)" class="block positive" :class="{'active':selectType === 1}">{{desc.positive}}<span class="count">{{positives.length}}</span></span>
+      <span @click="select(0)" class="block negative" :class="{'active':selectType === 0}">{{desc.negative}}<span class="count">{{negatives.length}}</span></span>
     </div>
-    <div class="switch" :class="{'on':onlyContent === true}">
+    <div @click="toggleContent" class="switch" :class="{'on':onlyContent === true}">
       <span class="icon-check_circle"></span>
       <span class="text">只看有内容的评价</span>
     </div>
@@ -13,8 +13,8 @@
 </template>
 
 <script>
-// const POSITIVE = 0;
-// const NEGATIVE = 1;
+const POSITIVE = 0;
+const NEGATIVE = 1;
 const ALL = 2;
 
 export default {
@@ -44,9 +44,24 @@ export default {
       }
     }
   },
+  computed: {
+    positives() {
+      return this.ratings.filter((rating) => {
+        return rating.rateType === POSITIVE;
+      });
+    },
+    negatives() {
+      return this.ratings.filter((rating) => {
+        return rating.rateType === NEGATIVE;
+      });
+    }
+  },
   methods: {
     select(type) {
-      this.selectType = type;
+      this.$emit('changeType', type); // 2.0中不允许修改父组件传来的props，所以回传到父组件，在父组件中修改
+    },
+    toggleContent() {
+      this.$emit('changeContent');
     }
   }
 };

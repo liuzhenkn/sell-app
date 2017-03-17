@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="showcart-wrapper">
     <div class="shopcart">
       <div class="content" @click="toggleList">
         <div class="content-left">

@@ -36,21 +36,23 @@
           <ratingselect @changeType="changeSelectType" @changeContent="changeShowContent" :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="food.ratings"></ratingselect>
           <div class="rating-wrapper">
             <ul v-show="food.ratings && food.ratings.length">
-              <li v-for="rating in food.ratings" class="rating-item border-1px">
+              <li v-show="needShow(rating.rateType,rating.text)" v-for="rating in food.ratings" class="rating-item border-1px">
                 <div class="user">
                   <span class="name">{{rating.username}}</span>
                   <img :src="rating.avatar" class="avatar" width="12" height="12">
                 </div>
                 <div class="time">
-                  {{rating.rateTime}}
+                  {{rating.rateTime | formatDate}}
                 </div>
                 <p class="text">
                   <span :class="{'icon-thumb_up': rating.rateType===0,'icon-thumb_down': rating.rateType===1}">
                   </span>
+                  {{rating.text}}
                 </p>
               </li>
             </ul>
-            <div class="on-rating" v-show="!food.ratings || !food.ratings.length">
+            <div class="no-rating" v-show="!food.ratings || !food.ratings.length">
+              暂无评价
             </div>
           </div>
         </div>
@@ -65,6 +67,7 @@ import Vue from 'vue'; // 存在疑问 为什么要再引一次 否则无法调�
 import cartcontrol from '../cartcontrol/cartcontrol';
 import split from '../split/split';
 import ratingselect from '../ratingselect/ratingselect';
+import {formatDate} from '../../common/js/common';
 
 // const POSITIVE = 0;
 // const NEGATIVE = 1;
@@ -114,9 +117,31 @@ export default {
     },
     changeSelectType(type) {
       this.selectType = type;
+      this.$nextTick(() => {
+        this.scroll.refresh();
+      });
     },
     changeShowContent() {
       this.onlyContent = !this.onlyContent;
+      this.$nextTick(() => {
+        this.scroll.refresh();
+      });
+    },
+    needShow(type, text) {
+      if (this.onlyContent && !text) {
+        return false;
+      }
+      if (this.selectType === ALL) {
+        return true;
+      } else {
+        return type === this.selectType;
+      }
+    }
+  },
+  filters: {
+    formatDate(time) {
+      let date = new Date(time);
+      return formatDate(date, 'yyyy-MM-dd hh:mm');
     }
   },
   components: {
@@ -266,4 +291,8 @@ export default {
               color: rgb(0,160,220)
             .icon-thumb_down
               color: rgb(147,153,159)
+        .no-rating
+          padding: 16px 0
+          font-size: 12px
+          color: rgb(147,153,159)
 </style>

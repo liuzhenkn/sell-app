@@ -70,7 +70,9 @@ export default {
       .star-item
         width: 15px
         height: 15px
-        margin-right: 16px
+        margin-right: 8px
+        @media only screen and (max-width: 320px)
+          margin-right: 4px
         &:last-child
           margin-right: 0
         &.on
